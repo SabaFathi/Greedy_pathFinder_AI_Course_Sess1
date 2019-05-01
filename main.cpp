@@ -31,7 +31,7 @@ bool is_node_in_field(node tmp);
 bool is_node_in_visited(node tmp);
 bool is_wall(node tmp);
 bool is_final_node(node tmp);
-node get_best_node();
+node pop_best_node();
 double calc_node_error(node tmp);
 
 int main(){
@@ -42,7 +42,7 @@ int main(){
 
     cout << "nodes got open in order : "<<endl;
     while(!open_list.empty()){
-        cur_node = get_best_node();
+        cur_node = pop_best_node();
 
         cout << cur_node.x << " , " << cur_node.y << endl;
 
@@ -60,14 +60,9 @@ int main(){
     return 0;
 }
 
-double calc_node_error(node tmp){
-    double error = abs(tmp.x - goal_x) + abs(tmp.y - goal_y);
-    return error;
-}
-
-node get_best_node(){
+node pop_best_node(){
     double min_error = 9999;
-    double best_node_index;
+    int best_node_index;
     for(int i = 0 ; i < open_list.size() ; i++){
         node tmp = open_list.at(i);
         double cur_node_error = calc_node_error(tmp);
@@ -76,16 +71,19 @@ node get_best_node(){
             best_node_index = i;
         }
     }
+    
     node best_node = open_list.at(best_node_index);
     open_list.erase(open_list.begin() + best_node_index);
     return best_node;
 }
 
+double calc_node_error(node tmp){
+    double error = abs(tmp.x - goal_x) + abs(tmp.y - goal_y);
+    return error;
+}
+
 bool is_final_node(node tmp){
-    if(tmp.x == goal_x && tmp.y == goal_y){
-        return true;
-    }
-    return false;
+    return (tmp.x == goal_x && tmp.y == goal_y);
 }
 
 void add_node(node cur){
@@ -125,29 +123,11 @@ void add_node(node cur){
 }
 
 bool is_node_valid(node tmp){
-    if(is_node_in_field(tmp) == false){
-        return false;
-    }
-    if(is_node_in_visited(tmp)){
-        return false;
-    }
-    if(is_wall(tmp)){
-        return false;
-    }
-    return true;
+    return (is_node_in_field(tmp)) && (!is_node_in_visited(tmp)) && (!is_wall(tmp));
 }
 
 bool is_node_in_field(node tmp){
-    if(tmp.x <0 || tmp.y < 0){
-        return false;
-    }
-    if(tmp.x > 5){
-        return false;
-    }
-    if(tmp.y > 4){
-        return false;
-    }
-    return true;
+    return (0 <= tmp.x && tmp.x <= 5) && (0 <= tmp.y && tmp.y <= 4);
 }
 
 bool is_node_in_visited(node tmp){
@@ -160,9 +140,5 @@ bool is_node_in_visited(node tmp){
 }
 
 bool is_wall(node tmp){
-    if(my_map[tmp.y][tmp.x] == '#'){
-        return true;
-    }
-    return false;
+    return (my_map[tmp.y][tmp.x] == '#');
 }
-
