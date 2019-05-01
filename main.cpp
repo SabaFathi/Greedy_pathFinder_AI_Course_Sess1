@@ -1,6 +1,7 @@
 //#include <QCoreApplication>
 #include <iostream>
 #include <vector>
+//using namespace std;
 using namespace std;
 int my_x = 1;
 int my_y = 4;
@@ -25,7 +26,7 @@ bool is_node_valid(node tmp);
 bool is_node_in_field(node tmp);
 bool is_node_in_visited(node tmp);
 bool is_wall(node tmp);
-bool is_final(node tmp);
+bool is_final_node(node tmp);
 node get_best_node();
 double calc_node_error(node tmp);
 int main()
@@ -42,7 +43,7 @@ int main()
         cout << cur_node.x << " , " << cur_node.y << endl;
 
         visited.push_back(cur_node);
-        if(is_final(cur_node)){
+        if(is_final_node(cur_node)){
             break;
         }
         add_node(cur_node);
@@ -74,7 +75,7 @@ node get_best_node(){
     open_list.erase(open_list.begin() + best_node_index);
     return best_node;
 }
-bool is_final(node tmp){
+bool is_final_node(node tmp){
     if(tmp.x == goal_x && tmp.y == goal_y){
         return true;
     }
