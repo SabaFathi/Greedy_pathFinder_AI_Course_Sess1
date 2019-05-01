@@ -1,26 +1,30 @@
 //#include <QCoreApplication>
 #include <iostream>
 #include <vector>
-//using namespace std;
+
 using namespace std;
+
 int my_x = 1;
 int my_y = 4;
 int goal_x = 5;
 int goal_y = 0;
 char my_map[5][6] = {
-{' ','#',' ',' ',' ',' '},
-{'#',' ',' ','#','#','#'},
-{' ',' ',' ',' ',' ',' '},
-{' ','#','#','#','#',' '},
-{' ',' ',' ',' ',' ',' '}
+    {' ','#',' ',' ',' ',' '},
+    {'#',' ',' ','#','#','#'},
+    {' ',' ',' ',' ',' ',' '},
+    {' ','#','#','#','#',' '},
+    {' ',' ',' ',' ',' ',' '}
 };
+
 struct node{
     int x;
     int y;
     vector<pair<int,int> > path;
 };
+
 vector<node> visited;
 vector<node> open_list;
+
 void add_node(node cur);
 bool is_node_valid(node tmp);
 bool is_node_in_field(node tmp);
@@ -29,8 +33,8 @@ bool is_wall(node tmp);
 bool is_final_node(node tmp);
 node get_best_node();
 double calc_node_error(node tmp);
-int main()
-{
+
+int main(){
     node cur_node;
     cur_node.x = my_x;
     cur_node.y = my_y;
@@ -53,13 +57,14 @@ int main()
         cout << cur_node.path.at(i).first << " , "<< cur_node.path.at(i).second << endl;
     }
 
-
     return 0;
 }
+
 double calc_node_error(node tmp){
     double error = abs(tmp.x - goal_x) + abs(tmp.y - goal_y);
     return error;
 }
+
 node get_best_node(){
     double min_error = 9999;
     double best_node_index;
@@ -75,12 +80,14 @@ node get_best_node(){
     open_list.erase(open_list.begin() + best_node_index);
     return best_node;
 }
+
 bool is_final_node(node tmp){
     if(tmp.x == goal_x && tmp.y == goal_y){
         return true;
     }
     return false;
 }
+
 void add_node(node cur){
     vector <pair<int,int> > new_path = cur.path;
     pair<int,int> head_node;
@@ -116,6 +123,7 @@ void add_node(node cur){
     }
 
 }
+
 bool is_node_valid(node tmp){
     if(is_node_in_field(tmp) == false){
         return false;
@@ -128,6 +136,7 @@ bool is_node_valid(node tmp){
     }
     return true;
 }
+
 bool is_node_in_field(node tmp){
     if(tmp.x <0 || tmp.y < 0){
         return false;
@@ -140,6 +149,7 @@ bool is_node_in_field(node tmp){
     }
     return true;
 }
+
 bool is_node_in_visited(node tmp){
     for(int i = 0 ; i < visited.size() ; i++){
         if(visited.at(i).x == tmp.x && visited.at(i).y == tmp.y){
@@ -148,15 +158,11 @@ bool is_node_in_visited(node tmp){
     }
     return false;
 }
+
 bool is_wall(node tmp){
     if(my_map[tmp.y][tmp.x] == '#'){
         return true;
     }
     return false;
 }
-
-
-
-
-
 
